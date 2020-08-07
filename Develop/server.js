@@ -2,7 +2,8 @@
 // =============================================================
 var express = require("express");
 var path = require("path");
-var fs = require("fs")
+var fs = require("fs");
+var notes = require("./db/db.json");
 
 // Sets up the Express App
 // =============================================================
@@ -13,7 +14,7 @@ var PORT = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Routes
+// HTML Routes
 // =============================================================
 // Basic routes that send the user to the notes home page and notes edit page
 app.get("/", function (req, res) {
@@ -24,21 +25,21 @@ app.get("/notes", function (req, res) {
     res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
-// api routes
-var notes = require("./db/db.json");
+// API Routes
+// =============================================================
 // Displays all notes
 app.get("/api/notes", function(req, res) {
-    return res.json(notes);
+    res.json(notes);
 });
+
 // post routes
 app.post("/api/notes", function(req, res) {
     notes.push(req.body)
     res.json(true);
-})
-
+});
 
 
 // listens for server
 app.listen(PORT, function () {
-    console.log("App listening on PORT: " + PORT);
+    console.log("App listening on PORT: http://localhost:" + PORT);
 });
