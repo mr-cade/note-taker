@@ -67,7 +67,7 @@ app.post("/api/notes", function (req, res) {
         let notes = JSON.parse(data);
         var newNote = req.body;
         var timeStamp = new Date();
-        newNote.id = timeStamp.getTime();
+        newNote.id = timeStamp;
         notes.push(newNote);
 
         fs.writeFile(__dirname + "/db/db.json", JSON.stringify(notes), function (err, data) {
@@ -80,17 +80,17 @@ app.post("/api/notes", function (req, res) {
 
 app.delete("/api/notes/:id", function (req, res) {
     //get the id out of the req.
-    let notesID = req.params.id;
+    let notesID = req.params.id.toString();
     console.log(notesID);
     //get all the notes out of the database.
     fs.readFile(__dirname + "/db/db.json", function (err, data) {
         if (err) throw err;
         let notes = JSON.parse(data);
         let filteredNotes = notes.filter((note) => { return note.id !== notesID })
-
+        console.log(filteredNotes);
         fs.writeFile(__dirname + "/db/db.json", JSON.stringify(filteredNotes), function (err, data) {
             if (err) throw err;
-            console.log(filteredNotes);
+            
             res.json(filteredNotes);
         })
     });
